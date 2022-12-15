@@ -3,18 +3,18 @@ import ssl # import ssl library (native)
 import json # import json library (native)
 from multipledispatch import dispatch # import the dispatch library to enable method overloading in python
 import board
-#import neopixel
+import neopixel
 import rel
 
-# pixel_pin = board.D21 # the pin to which the LED strip is connected to
-# num_pixels = 24 # this specifies the TOTAL number of pixels (should be a multiple of 12. ie. 12, 24, 36, 48 etc)
-#ORDER = neopixel.GRB # set the color type of the neopixel
+pixel_pin = board.D21 # the pin to which the LED strip is connected to
+num_pixels = 24 # this specifies the TOTAL number of pixels (should be a multiple of 12. ie. 12, 24, 36, 48 etc)
+ORDER = neopixel.GRB # set the color type of the neopixel
 ledSegment = 6 # number of LEDs in a single segment
 ledArray = [[[0 for i in range(3)] for j in range(ledSegment)] for z in range(4)] #the array which stores the pixel information
 
-# pixels = neopixel.NeoPixel( # create and initiate neopixel object
-#     pixel_pin, num_pixels, brightness=0.2, auto_write=False, pixel_order=ORDER
-# )
+pixels = neopixel.NeoPixel( # create and initiate neopixel object
+    pixel_pin, num_pixels, brightness=0.2, auto_write=False, pixel_order=ORDER
+)
 
 
 
@@ -99,12 +99,12 @@ def updatePixels(json):
         
         offset = iteration * ledSegment # calculate the offset to address the single neopixel strip as it were N number of strips
 
-        # for index in range(ledSegment): # for loop to run through the individual segments
-        #     pixels[index+offset] = (ledArray[iteration][index][0],ledArray[iteration][index][1],ledArray[iteration][index][2]) # for each pixel on the LED strip, calculate the position of the color inside the three dimensional color array and assign it
+        for index in range(ledSegment): # for loop to run through the individual segments
+            pixels[index+offset] = (ledArray[iteration][index][0],ledArray[iteration][index][1],ledArray[iteration][index][2]) # for each pixel on the LED strip, calculate the position of the color inside the three dimensional color array and assign it
         
         iteration += 1 # increase the iteration (ie. work on the next segment of the LED strip)
     
-    #pixels.show() # once done, update the led strip
+    pixels.show() # once done, update the led strip
 
 # function to assign single color to array
 @dispatch(int, int, int, int)
